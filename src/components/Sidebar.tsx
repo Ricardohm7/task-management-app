@@ -1,7 +1,7 @@
-import { Drawer, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import SettingsIcon from '@mui/icons-material/Settings';
-import { Link, useLocation } from 'wouter';
+import { Drawer, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
+import DashboardIcon from '@mui/icons-material/Dashboard'
+import SettingsIcon from '@mui/icons-material/Settings'
+import { Link, useLocation } from 'wouter'
 
 interface SidebarItemProps {
   href: string;
@@ -10,8 +10,8 @@ interface SidebarItemProps {
 }
 
 const SidebarItem: React.FC<SidebarItemProps> = ({ href, Icon, text }) => {
-  const [location] = useLocation();
-  const isActive = location === href;
+  const [location] = useLocation()
+  const isActive = location === href
 
   return (
     <ListItemButton selected={isActive} LinkComponent={Link} href={href}>
@@ -42,7 +42,7 @@ const Sidebar = () => {
         <SidebarItem href='/settings' Icon={SettingsIcon} text='Settings' />
       </List>
     </Drawer>
-  );
-};
+  )
+}
 
-export default Sidebar;
+export default Sidebar
