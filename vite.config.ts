@@ -8,5 +8,4 @@ export default defineConfig({
   resolve: {
     ...aliasConfig
   },
-  base: process.env.VITE_BASE_URL || '/'
 })
