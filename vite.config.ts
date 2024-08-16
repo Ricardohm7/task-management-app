@@ -15,5 +15,5 @@ export default defineConfig({
       '@utils': path.resolve(__dirname, 'src/utils'),
     }
   },
-  base: '/task-management-app/'
+  base: process.env.VITE_BASE_URL || '/'
 })
