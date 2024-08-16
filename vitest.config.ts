@@ -2,6 +2,7 @@
 
 import react from '@vitejs/plugin-react-swc'
 import { defineConfig } from 'vite'
+import aliasConfig from './vite.alias.config'
 
 export default defineConfig({
   plugins: [react()],
@@ -9,4 +10,7 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./vitest.setup.ts'],
   },
+  resolve: {
+    ...aliasConfig
+  }
 })
