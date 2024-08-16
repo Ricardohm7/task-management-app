@@ -5,6 +5,8 @@ import { createTheme, PaletteMode, ThemeProvider } from '@mui/material'
 import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
 import getLPTheme from '@utils/theme'
+import Container from '@mui/material/Container'
+import { Outlet } from 'react-router-dom'
 
 const App = () => {
   const [mode, setMode] = useState<PaletteMode>('light')
@@ -32,8 +34,9 @@ const App = () => {
           }}
         >
           <Toolbar />
-          {/* <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-          </Container> */}
+          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+            <Outlet />
+          </Container>
         </Box>
       </Box>
     </ThemeProvider>

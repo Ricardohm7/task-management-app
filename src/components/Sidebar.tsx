@@ -11,9 +11,9 @@ import Divider from '@mui/material/Divider'
 import IconButton from '@mui/material/IconButton'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import { SIDEBAR_WIDTH } from '@utils/constants'
-import { Link, useLocation } from 'wouter'
 import DashboardIcon from '@mui/icons-material/Dashboard'
 import SettingsIcon from '@mui/icons-material/Settings'
+import { NavLink } from 'react-router-dom'
 
 const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
@@ -48,16 +48,18 @@ interface SidebarItemProps {
 }
 
 const SidebarItem: React.FC<SidebarItemProps> = ({ href, Icon, text }) => {
-  const [location] = useLocation()
-  const isActive = location === href
-
   return (
-    <ListItemButton selected={isActive} LinkComponent={Link} href={href}>
-      <ListItemIcon>
-        <Icon />
-      </ListItemIcon>
-      <ListItemText primary={text} />
-    </ListItemButton>
+    <NavLink to={href} style={{ textDecoration: 'unset', color: 'inherit' }}>
+      {({ isActive }) => (
+        <ListItemButton selected={isActive}>
+          <ListItemIcon>
+            <Icon />
+          </ListItemIcon>
+          <ListItemText primary={text} />
+        </ListItemButton>
+      )}
+    </NavLink>
+
   )
 }
 interface SidebarProps {
@@ -83,8 +85,8 @@ const Sidebar: React.FC<SidebarProps> = ({ onClose, open }) => {
         </Toolbar>
         <Divider />
         <List component="nav">
-          <SidebarItem href='/' Icon={DashboardIcon} text='Dashboard' />
-          <SidebarItem href='/settings' Icon={SettingsIcon} text='Settings' />
+          <SidebarItem href='dashboard' Icon={DashboardIcon} text='Dashboard' />
+          <SidebarItem href='settings' Icon={SettingsIcon} text='Settings' />
         </List>
       </Drawer>
     </Box>
