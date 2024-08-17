@@ -616,8 +616,10 @@ export default function getLPTheme(mode: PaletteMode): ThemeOptions {
           root: ({ theme }) => ({
             backgroundColor: '#fff',
             color: theme.palette.text.primary,
+            border: `1px solid ${alpha(gray[200], 0.8)}`,
             ...(theme.palette.mode === 'dark' && {
-              backgroundColor: theme.palette.background.default
+              backgroundColor: theme.palette.background.default,
+              border: `1.5px solid ${alpha(gray[700], 0.3)}`,
             })
           })
         }
