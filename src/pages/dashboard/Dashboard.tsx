@@ -1,89 +1,164 @@
-import { useState } from 'react'
-import {
-  Box,
-  Grid,
-  Paper,
-  Typography,
-  IconButton
-} from '@mui/material'
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
-import AddIcon from '@mui/icons-material/Add'
+import React, { useState } from 'react'
+import { DndContext, DragOverlay, closestCorners, KeyboardSensor, PointerSensor, useSensor, useSensors, DragStartEvent, DragOverEvent, DragEndEvent } from '@dnd-kit/core'
+import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable'
+import { Grid, Paper, Typography, Box } from '@mui/material'
+import SortableItem from './components/SortableItem'
+import TaskCard from './components/TaskCard'
+import { ColumnId, Task, Tasks } from './types'
 
-import Card from './components/Card'
-import ColumnMenu from './components/ColumnMenu'
+const initialTasks: Tasks = {
+  drafting: [
+    { id: 'task1', content: 'A task', type: 'default' },
+    { id: 'task2', content: 'Reduce costs to become a profitable company by end of year', type: 'company-goal' },
+    { id: 'task3', content: 'Increase self-serve ARR by $200K', type: 'team-goal' },
+  ],
+  pendingApproval: [
+    { id: 'task4', content: 'Improve employee engagement scores (quarterly surveys)', type: 'default' },
+  ],
+  approved: [
+    { id: 'task5', content: 'Capture 7% market share by 2025', type: 'company-goal' },
+    { id: 'task6', content: 'Reduce marketing spend by $3M', type: 'team-goal' },
+  ],
+  created: [],
+}
 
+const columnTitles: { [key in ColumnId]: string } = {
+  drafting: 'Drafting',
+  pendingApproval: 'Pending approval',
+  approved: 'Approved',
+  created: 'Created',
+}
 
-// Dummy data
-const columns = [
-  {
-    title: 'Drafting',
-    tasks: [
-      { id: 1, content: 'A task', type: 'default', comments: 1 },
-      { id: 2, content: 'Reduce costs to become a profitable company by end of year', type: 'company', comments: 2 },
-      { id: 3, content: 'Increase self-serve ARR by $200K', type: 'team', comments: 2 },
-    ]
-  },
-  {
-    title: 'Pending approval',
-    tasks: [
-      { id: 4, content: 'Improve employee engagement scores (based on quarterly surveys)', type: 'default', comments: 5 },
-    ]
-  },
-  {
-    title: 'Approved',
-    tasks: [
-      { id: 5, content: 'Capture 7% market share by 2025', type: 'company', comments: 7 },
-      { id: 6, content: 'Reduce marketing spend by $3M', type: 'team', comments: 7 },
-    ]
-  },
-  {
-    title: 'Created',
-    tasks: []
-  }
-]
+function Dashboard() {
+  const [tasks, setTasks] = useState<Tasks>(initialTasks)
+  const [activeId, setActiveId] = useState<string | null>(null)
 
-const Dashboard = () => {
-  const [tasks] = useState(columns)
-  const [menuAnchor, setMenuAnchor] = useState<HTMLButtonElement | null>(null)
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  )
 
-  const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    setMenuAnchor(event.currentTarget)
+  const handleDragStart = (event: DragStartEvent) => {
+    const { active } = event
+    setActiveId(active.id as string)
   }
 
-  const handleMenuClose = () => {
-    setMenuAnchor(null)
+  const handleDragOver = (event: DragOverEvent) => {
+    const { active, over } = event
+    if (!over) return
+
+    const activeContainer = Object.keys(tasks).find((key) =>
+      tasks[key as ColumnId].find((task) => task.id === active.id)
+    ) as ColumnId | undefined
+    const overContainer = (Object.keys(tasks).find((key) =>
+      tasks[key as ColumnId].find((task) => task.id === over.id)
+    ) || over.id) as ColumnId
+
+    if (activeContainer && activeContainer !== overContainer) {
+      setTasks((prev) => {
+        const activeItems = prev[activeContainer]
+        const overItems = prev[overContainer]
+        const activeIndex = activeItems.findIndex((item) => item.id === active.id)
+        const overIndex = overItems.findIndex((item) => item.id === over.id)
+
+        return {
+          ...prev,
+          [activeContainer]: [
+            ...prev[activeContainer].filter((item) => item.id !== active.id),
+          ],
+          [overContainer]: [
+            ...prev[overContainer].slice(0, overIndex),
+            activeItems[activeIndex],
+            ...prev[overContainer].slice(overIndex),
+          ],
+        }
+      })
+    }
+  }
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event
+
+    if (active.id !== over?.id) {
+      const activeContainer = Object.keys(tasks).find((key) =>
+        tasks[key as ColumnId].find((task) => task.id === active.id)
+      ) as ColumnId | undefined
+      const overContainer = (Object.keys(tasks).find((key) =>
+        tasks[key as ColumnId].find((task) => task.id === over?.id)
+      ) || over?.id) as ColumnId
+
+      if (activeContainer && overContainer) {
+        setTasks((prev) => {
+          const activeItems = prev[activeContainer]
+          const overItems = prev[overContainer]
+          const activeIndex = activeItems.findIndex((item) => item.id === active.id)
+          const overIndex = overItems.findIndex((item) => item.id === over?.id)
+
+          if (activeContainer === overContainer) {
+            return {
+              ...prev,
+              [overContainer]: arrayMove(overItems, activeIndex, overIndex),
+            }
+          }
+
+          return {
+            ...prev,
+            [activeContainer]: [
+              ...prev[activeContainer].filter((item) => item.id !== active.id),
+            ],
+            [overContainer]: [
+              ...prev[overContainer].slice(0, overIndex),
+              activeItems[activeIndex],
+              ...prev[overContainer].slice(overIndex),
+            ],
+          }
+        })
+      }
+    }
+
+    setActiveId(null)
+  }
+
+  const getTaskById = (id: string): Task | undefined => {
+    for (const column of Object.values(tasks)) {
+      const task = column.find((task) => task.id === id)
+      if (task) return task
+    }
   }
 
   return (
-    <Box sx={{ flexGrow: 1, p: 3 }}>
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCorners}
+      onDragStart={handleDragStart}
+      onDragOver={handleDragOver}
+      onDragEnd={handleDragEnd}
+    >
       <Grid container spacing={2}>
-        {tasks.map((column) => (
-          <Grid item xs={3} key={column.title}>
-            <Paper sx={{ p: 2 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                <Typography variant="h6">{column.title} {column.tasks.length}</Typography>
-                <Box>
-                  <IconButton size="small"><AddIcon /></IconButton>
-                  <IconButton size="small" onClick={(e) => handleMenuOpen(e)}><MoreHorizIcon /></IconButton>
-                </Box>
+        {(Object.keys(tasks) as ColumnId[]).map((columnId) => (
+          <Grid item xs={3} key={columnId}>
+            <Paper sx={{ p: 2, height: '100%' }}>
+              <Typography variant="h6" gutterBottom>
+                {columnTitles[columnId]} ({tasks[columnId].length})
+              </Typography>
+              <SortableContext items={tasks[columnId].map(task => task.id)} strategy={verticalListSortingStrategy}>
+                {tasks[columnId].map((task) => (
+                  <SortableItem key={task.id} id={task.id} task={task} />
+                ))}
+              </SortableContext>
+              <Box mt={2}>
+                <Typography color="textSecondary">+ Add task</Typography>
               </Box>
-              {column.tasks.map((task) => (
-                <Card id={task.id} type={task.type} comments={task.comments} content={task.content} />
-              ))}
-              {column.tasks.length === 0 && (
-                <Typography variant="body2" sx={{ textAlign: 'center', color: 'text.secondary' }}>
-                  + Add task
-                </Typography>
-              )}
             </Paper>
           </Grid>
         ))}
       </Grid>
-      <ColumnMenu
-        handleMenuClose={handleMenuClose}
-        menuAnchor={menuAnchor}
-      />
-    </Box>
+      <DragOverlay>
+        {activeId ? <TaskCard task={getTaskById(activeId)} /> : null}
+      </DragOverlay>
+    </DndContext>
   )
 }
 
