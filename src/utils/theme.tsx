@@ -125,7 +125,7 @@ const getDesignTokens = (mode: PaletteMode) => ({
       ...(mode === 'dark' && { primary: '#fff', secondary: gray[400] }),
     },
     action: {
-      selected: `${alpha(brand[200], 0.2)}`,
+      selected: alpha(brand[200], 0.2),
       ...(mode === 'dark' && {
         selected: alpha(brand[800], 0.2),
       }),
@@ -386,7 +386,7 @@ export default function getLPTheme(mode: PaletteMode): ThemeOptions {
             px: 0.5,
             background: `linear-gradient(to bottom right, ${brand[50]}, ${brand[100]})`,
             border: '1px solid',
-            borderColor: `${alpha(brand[500], 0.3)}`,
+            borderColor: alpha(brand[500], 0.3),
             fontWeight: '600',
             '&:hover': {
               backgroundColor: brand[500],
@@ -403,7 +403,7 @@ export default function getLPTheme(mode: PaletteMode): ThemeOptions {
             },
             ...(theme.palette.mode === 'dark' && {
               background: `linear-gradient(to bottom right, ${brand[700]}, ${brand[900]})`,
-              borderColor: `${alpha(brand[500], 0.5)}`,
+              borderColor: alpha(brand[500], 0.5),
               '&:hover': {
                 backgroundColor: brand[600],
               },
@@ -424,9 +424,9 @@ export default function getLPTheme(mode: PaletteMode): ThemeOptions {
       MuiDivider: {
         styleOverrides: {
           root: ({ theme }) => ({
-            borderColor: `${alpha(gray[200], 0.8)}`,
+            borderColor: alpha(gray[200], 0.8),
             ...(theme.palette.mode === 'dark' && {
-              borderColor: `${alpha(gray[700], 0.4)}`,
+              borderColor: alpha(gray[700], 0.4),
             }),
           }),
         },
@@ -572,7 +572,7 @@ export default function getLPTheme(mode: PaletteMode): ThemeOptions {
               '& fieldset': {
                 border: 'none',
                 boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
-                background: `${alpha('#FFF', 0.3)}`,
+                background: alpha('#FFF', 0.3),
               },
               '&:hover': {
                 borderColor: brand[300],
@@ -596,7 +596,7 @@ export default function getLPTheme(mode: PaletteMode): ThemeOptions {
                 '& fieldset': {
                   border: 'none',
                   boxShadow: ' 0px 2px 4px rgba(0, 0, 0, 0.4)',
-                  background: `${alpha(gray[800], 0.4)}`,
+                  background: alpha(gray[800], 0.4),
                 },
                 '&:hover': {
                   borderColor: brand[300],

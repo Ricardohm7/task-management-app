@@ -11,7 +11,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 
 interface columnMenuProps {
   menuAnchor: HTMLButtonElement | null;
-  handleMenuOpen?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, columnIndex: number) => void;
+  handleMenuOpen?: (event: React.MouseEvent<HTMLButtonElement>, columnIndex: number) => void;
   handleMenuClose: () => void
 }
 

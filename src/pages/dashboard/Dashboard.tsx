@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { DndContext, DragOverlay, closestCorners, KeyboardSensor, PointerSensor, useSensor, useSensors, DragStartEvent, DragOverEvent, DragEndEvent } from '@dnd-kit/core'
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { Grid, Paper, Typography, Box } from '@mui/material'
@@ -89,7 +89,7 @@ function Dashboard() {
         tasks[key as ColumnId].find((task) => task.id === over?.id)
       ) || over?.id) as ColumnId
 
-      if (activeContainer && overContainer) {
+      if (activeContainer) {
         setTasks((prev) => {
           const activeItems = prev[activeContainer]
           const overItems = prev[overContainer]

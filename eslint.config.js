@@ -6,7 +6,7 @@ import tseslint from 'typescript-eslint'
 import stylistic from '@stylistic/eslint-plugin'
 
 export default tseslint.config({
-  extends: [js.configs.recommended, ...tseslint.configs.recommendedTypeChecked],
+  extends: [js.configs.recommended, ...tseslint.configs.strictTypeChecked],
   files: ['src/**/*.{ts,tsx}'],
   ignores: ['dist'],
   languageOptions: {
@@ -30,6 +30,13 @@ export default tseslint.config({
     ],
     '@stylistic/indent': ['error', 2],
     '@stylistic/semi': ['error', 'never'],
-    '@stylistic/quotes': ['error', 'single', { 'avoidEscape': true }]
+    '@stylistic/quotes': ['error', 'single', { 'avoidEscape': true }],
+    '@typescript-eslint/restrict-template-expressions': [
+      'error',
+      {
+        'allowNumber': true
+      }
+    ],
+    '@typescript-eslint/no-non-null-assertion': 'off'
   }
 })
