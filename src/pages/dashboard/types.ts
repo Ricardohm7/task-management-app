@@ -4,6 +4,8 @@ export interface Task {
   id: string;
   content: string;
   type: TaskType;
+  title?: string;
+  description?: string;
 }
 
 export type ColumnId = 'drafting' | 'pendingApproval' | 'approved' | 'created'

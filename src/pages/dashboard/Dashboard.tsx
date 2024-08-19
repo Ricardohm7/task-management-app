@@ -1,10 +1,16 @@
 import { useState } from 'react'
 import { DndContext, DragOverlay, closestCorners, KeyboardSensor, PointerSensor, useSensor, useSensors, DragStartEvent, DragOverEvent, DragEndEvent } from '@dnd-kit/core'
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable'
-import { Grid, Paper, Typography, Box } from '@mui/material'
+import Grid from '@mui/material/Grid'
+import Paper from '@mui/material/Paper'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import Typography from '@mui/material/Typography'
 import SortableItem from './components/SortableItem'
 import TaskCard from './components/TaskCard'
 import { ColumnId, Task, Tasks } from './types'
+import TaskModal from './components/TaskModal'
+import AddIcon from '@mui/icons-material/Add'
 
 const initialTasks: Tasks = {
   drafting: [
@@ -32,6 +38,11 @@ const columnTitles: { [key in ColumnId]: string } = {
 function Dashboard() {
   const [tasks, setTasks] = useState<Tasks>(initialTasks)
   const [activeId, setActiveId] = useState<string | null>(null)
+  const [openTaskModal, setOpenTaskModal] = useState(false)
+
+  const handleOpen = () => setOpenTaskModal(true)
+  const handleClose = () => setOpenTaskModal(false)
+
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -149,7 +160,22 @@ function Dashboard() {
                 ))}
               </SortableContext>
               <Box mt={2}>
-                <Typography color="textSecondary">+ Add task</Typography>
+                <Button
+                  startIcon={<AddIcon />}
+                  onClick={handleOpen}
+                  color="primary"
+                  sx={{
+                    textTransform: 'none',
+                    justifyContent: 'flex-start',
+                    padding: '8px',
+                    '&:hover': {
+                      backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                    },
+                  }}
+                >
+                  Add task
+                </Button>
+                <TaskModal open={openTaskModal} handleClose={handleClose} />
               </Box>
             </Paper>
           </Grid>

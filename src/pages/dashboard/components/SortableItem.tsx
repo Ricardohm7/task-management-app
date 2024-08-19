@@ -1,6 +1,6 @@
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { Card, CardContent, Typography, Chip } from '@mui/material'
+import TaskCard from './TaskCard'
 import { Task } from '../types'
 
 interface SortableItemProps {
@@ -25,24 +25,15 @@ function SortableItem({ id, task }: SortableItemProps) {
   }
 
   return (
-    <Card
+    <div
       ref={setNodeRef}
       style={style}
       {...attributes}
       {...listeners}
+      id={id}
     >
-      <CardContent>
-        <Typography variant="body2">{task.content}</Typography>
-        {task.type !== 'default' && (
-          <Chip
-            label={task.type === 'company-goal' ? 'Company goal' : 'Team goal'}
-            size="small"
-            color={task.type === 'company-goal' ? 'primary' : 'secondary'}
-            sx={{ mt: 1 }}
-          />
-        )}
-      </CardContent>
-    </Card>
+      <TaskCard task={task} />
+    </div>
   )
 }
 
