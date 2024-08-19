@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { DndContext, DragOverlay, closestCorners, KeyboardSensor, PointerSensor, useSensor, useSensors, DragStartEvent, DragOverEvent, DragEndEvent } from '@dnd-kit/core'
-import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
+import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
 import Box from '@mui/material/Box'
@@ -156,12 +156,12 @@ function Dashboard() {
                 <Typography variant="h6" gutterBottom>
                   {columnTitles[columnId]} ({tasks[columnId].length})
                 </Typography>
-                {/* <SortableContext items={tasks[columnId].map(task => task.id)} strategy={verticalListSortingStrategy}>
-                {tasks[columnId].map((task) => (
-                  <SortableItem key={task.id} id={task.id} task={task} />
-                ))}
-              </SortableContext> */}
-                <TaskBoard tasks={tasks[columnId]} />
+                <SortableContext
+                  items={tasks[columnId].map(task => task.id)}
+                  strategy={verticalListSortingStrategy}
+                >
+                  <TaskBoard tasks={tasks[columnId]} />
+                </SortableContext>
                 <Box mt={2}>
                   <Button
                     startIcon={<AddIcon />}

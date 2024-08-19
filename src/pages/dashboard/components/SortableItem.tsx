@@ -30,7 +30,6 @@ function SortableItem({ id, task }: SortableItemProps) {
       style={style}
       {...attributes}
       {...listeners}
-      id={id}
     >
       <TaskCard task={task} />
     </div>
