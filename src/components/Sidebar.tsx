@@ -70,7 +70,10 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ onClose, open }) => {
   return (
     <Box sx={{ display: 'flex' }}>
-      <Drawer variant="permanent" open={open}>
+      <Drawer
+        variant="permanent"
+        open={open}
+      >
         <Toolbar
           sx={{
             display: 'flex',

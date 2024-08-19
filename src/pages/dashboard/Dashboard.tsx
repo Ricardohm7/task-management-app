@@ -141,14 +141,14 @@ function Dashboard() {
   }
 
   return (
-    <MenuProvider>
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCorners}
-        onDragStart={handleDragStart}
-        onDragOver={handleDragOver}
-        onDragEnd={handleDragEnd}
-      >
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCorners}
+      onDragStart={handleDragStart}
+      onDragOver={handleDragOver}
+      onDragEnd={handleDragEnd}
+    >
+      <MenuProvider>
         <Grid container spacing={2}>
           {(Object.keys(tasks) as ColumnId[]).map((columnId) => (
             <Grid item xs={3} key={columnId}>
@@ -187,8 +187,8 @@ function Dashboard() {
         <DragOverlay>
           {activeId ? <TaskCard task={getTaskById(activeId)} /> : null}
         </DragOverlay>
-      </DndContext>
-    </MenuProvider>
+      </MenuProvider>
+    </DndContext>
   )
 }
 

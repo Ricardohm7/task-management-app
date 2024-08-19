@@ -30,16 +30,16 @@ export const secondary = {
 }
 
 export const gray = {
-  50: '#FBFCFE',
-  100: '#EAF0F5',
-  200: '#D6E2EB',
-  300: '#BFCCD9',
-  400: '#94A6B8',
-  500: '#5B6B7C',
-  600: '#4C5967',
-  700: '#364049',
-  800: '#131B20',
-  900: '#090E10',
+  50: '#F9FAFB',
+  100: '#F3F4F6',
+  200: '#E5E7EB',
+  300: '#D1D5DB',
+  400: '#9CA3AF',
+  500: '#6B7280',
+  600: '#4B5563',
+  700: '#374151',
+  800: '#252628', // Sidebar color
+  900: '#1F1F20',
 }
 
 export const green = {
@@ -132,7 +132,19 @@ const getDesignTokens = (mode: PaletteMode) => ({
     },
   },
   typography: {
-    fontFamily: ['"Roboto", "sans-serif"'].join(','),
+    fontFamily: [
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(','),
+
     h1: {
       fontSize: 60,
       fontWeight: 600,
@@ -378,49 +390,6 @@ export default function getLPTheme(mode: PaletteMode): ThemeOptions {
           }),
         },
       },
-      MuiChip: {
-        styleOverrides: {
-          root: ({ theme }) => ({
-            alignSelf: 'center',
-            py: 1.5,
-            px: 0.5,
-            background: `linear-gradient(to bottom right, ${brand[50]}, ${brand[100]})`,
-            border: '1px solid',
-            borderColor: alpha(brand[500], 0.3),
-            fontWeight: '600',
-            '&:hover': {
-              backgroundColor: brand[500],
-            },
-            '&:focus-visible': {
-              borderColor: brand[800],
-              backgroundColor: brand[200],
-            },
-            '& .MuiChip-label': {
-              color: brand[500],
-            },
-            '& .MuiChip-icon': {
-              color: brand[500],
-            },
-            ...(theme.palette.mode === 'dark' && {
-              background: `linear-gradient(to bottom right, ${brand[700]}, ${brand[900]})`,
-              borderColor: alpha(brand[500], 0.5),
-              '&:hover': {
-                backgroundColor: brand[600],
-              },
-              '&:focus-visible': {
-                borderColor: brand[200],
-                backgroundColor: brand[600],
-              },
-              '& .MuiChip-label': {
-                color: brand[200],
-              },
-              '& .MuiChip-icon': {
-                color: brand[200],
-              },
-            }),
-          }),
-        },
-      },
       MuiDivider: {
         styleOverrides: {
           root: ({ theme }) => ({
@@ -431,41 +400,9 @@ export default function getLPTheme(mode: PaletteMode): ThemeOptions {
           }),
         },
       },
-      MuiLink: {
-        defaultProps: {
-          underline: 'none',
-        },
-        styleOverrides: {
-          root: ({ theme }) => ({
-            color: brand[600],
-            fontWeight: 500,
-            position: 'relative',
-            textDecoration: 'none',
-            '&::before': {
-              content: '""',
-              position: 'absolute',
-              width: 0,
-              height: '1px',
-              bottom: 0,
-              left: 0,
-              backgroundColor: brand[200],
-              opacity: 0.7,
-              transition: 'width 0.3s ease, opacity 0.3s ease',
-            },
-            '&:hover::before': {
-              width: '100%',
-              opacity: 1,
-            },
-            ...(theme.palette.mode === 'dark' && {
-              color: brand[200],
-            }),
-          }),
-        },
-      },
       MuiMenuItem: {
         styleOverrides: {
           root: ({ theme }) => ({
-            borderRadius: '99px',
             color: gray[500],
             fontWeight: 500,
             ...(theme.palette.mode === 'dark' && {
@@ -477,75 +414,12 @@ export default function getLPTheme(mode: PaletteMode): ThemeOptions {
       MuiPaper: {
         styleOverrides: {
           root: ({ theme }) => ({
-            backgroundImage: 'none',
-            backgroundColor: '#fff',
+            boxShadow: 'unset',
+            border: `1px solid ${theme.palette.grey[300]}`,
             ...(theme.palette.mode === 'dark' && {
               backgroundColor: alpha(gray[900], 0.6),
             }),
           }),
-        },
-      },
-      MuiSwitch: {
-        styleOverrides: {
-          root: ({ theme }) => ({
-            boxSizing: 'border-box',
-            width: 36,
-            height: 24,
-            padding: 0,
-            transition: 'background-color 100ms ease-in',
-            '&:hover': {
-              '& .MuiSwitch-track': {
-                backgroundColor: brand[600],
-              },
-            },
-            '& .MuiSwitch-switchBase': {
-              '&.Mui-checked': {
-                transform: 'translateX(13px)',
-              },
-            },
-            '& .MuiSwitch-track': {
-              borderRadius: 50,
-            },
-            '& .MuiSwitch-thumb': {
-              boxShadow: '0 0 2px 2px rgba(0, 0, 0, 0.2)',
-              backgroundColor: '#FFF',
-              width: 16,
-              height: 16,
-              margin: 2,
-            },
-            ...(theme.palette.mode === 'dark' && {
-              width: 36,
-              height: 24,
-              padding: 0,
-              transition: 'background-color 100ms ease-in',
-              '&:hover': {
-                '& .MuiSwitch-track': {
-                  backgroundColor: brand[600],
-                },
-              },
-              '& .MuiSwitch-switchBase': {
-                '&.Mui-checked': {
-                  transform: 'translateX(13px)',
-                },
-              },
-              '& .MuiSwitch-thumb': {
-                boxShadow: '0 0 2px 2px rgba(0, 0, 0, 0.2)',
-                backgroundColor: '#FFF',
-                width: 16,
-                height: 16,
-                margin: 2,
-              },
-            }),
-          }),
-          switchBase: {
-            height: 24,
-            width: 24,
-            padding: 0,
-            color: '#fff',
-            '&.Mui-checked + .MuiSwitch-track': {
-              opacity: 1,
-            },
-          },
         },
       },
       MuiTextField: {
@@ -614,13 +488,32 @@ export default function getLPTheme(mode: PaletteMode): ThemeOptions {
       MuiAppBar: {
         styleOverrides: {
           root: ({ theme }) => ({
-            backgroundColor: '#fff',
-            color: theme.palette.text.primary,
-            border: `1px solid ${alpha(gray[200], 0.8)}`,
+            backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.1))',
+            backgroundColor: theme.palette.grey[800],
+            color: gray[100],
+            border: 'unset',
             ...(theme.palette.mode === 'dark' && {
-              backgroundColor: theme.palette.background.default,
-              border: `1.5px solid ${alpha(gray[700], 0.3)}`,
+              backgroundColor: theme.palette.grey[800],
             })
+          })
+        }
+      },
+      MuiDrawer: {
+        styleOverrides: {
+          root: ({ theme }) => ({
+            '& .MuiDrawer-paper': {
+              border: 'unset',
+              backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09))',
+              backgroundColor: theme.palette.grey[800],
+              color: gray[100]
+            }
+          })
+        }
+      },
+      MuiSvgIcon: {
+        styleOverrides: {
+          root: () => ({
+            color: gray[100],
           })
         }
       }
