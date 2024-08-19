@@ -15,13 +15,13 @@ interface TaskCardContextMenuProps {
   anchorPosition: {
     top: number;
     left: number;
-  } | undefined;
+  } | null;
   open: boolean;
   onClose: () => void;
   onMenuItemClick: (action: string) => void;
 }
 
-const CustomContextMenu: React.FC<TaskCardContextMenuProps> = ({
+const TaskCardContextMenu: React.FC<TaskCardContextMenuProps> = ({
   anchorPosition,
   open,
   onClose,
@@ -35,7 +35,7 @@ const CustomContextMenu: React.FC<TaskCardContextMenuProps> = ({
   return (
     <Menu
       anchorReference="anchorPosition"
-      anchorPosition={anchorPosition}
+      anchorPosition={anchorPosition ?? undefined}
       open={open}
       onClose={onClose}
       onClick={handleMenuClick}
@@ -110,4 +110,4 @@ const CustomContextMenu: React.FC<TaskCardContextMenuProps> = ({
   )
 }
 
-export default CustomContextMenu
+export default TaskCardContextMenu

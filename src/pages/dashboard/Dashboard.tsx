@@ -1,16 +1,17 @@
 import { useState } from 'react'
 import { DndContext, DragOverlay, closestCorners, KeyboardSensor, PointerSensor, useSensor, useSensors, DragStartEvent, DragOverEvent, DragEndEvent } from '@dnd-kit/core'
-import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable'
+import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
-import SortableItem from './components/SortableItem'
 import TaskCard from './components/TaskCard'
 import { ColumnId, Task, Tasks } from './types'
 import TaskModal from './components/TaskModal'
 import AddIcon from '@mui/icons-material/Add'
+import TaskBoard from './components/TaskBoard'
+import MenuProvider from './MenuContext'
 
 const initialTasks: Tasks = {
   drafting: [
@@ -140,51 +141,54 @@ function Dashboard() {
   }
 
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCorners}
-      onDragStart={handleDragStart}
-      onDragOver={handleDragOver}
-      onDragEnd={handleDragEnd}
-    >
-      <Grid container spacing={2}>
-        {(Object.keys(tasks) as ColumnId[]).map((columnId) => (
-          <Grid item xs={3} key={columnId}>
-            <Paper sx={{ p: 2, height: '100%' }}>
-              <Typography variant="h6" gutterBottom>
-                {columnTitles[columnId]} ({tasks[columnId].length})
-              </Typography>
-              <SortableContext items={tasks[columnId].map(task => task.id)} strategy={verticalListSortingStrategy}>
+    <MenuProvider>
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCorners}
+        onDragStart={handleDragStart}
+        onDragOver={handleDragOver}
+        onDragEnd={handleDragEnd}
+      >
+        <Grid container spacing={2}>
+          {(Object.keys(tasks) as ColumnId[]).map((columnId) => (
+            <Grid item xs={3} key={columnId}>
+              <Paper sx={{ p: 2, height: '100%' }}>
+                <Typography variant="h6" gutterBottom>
+                  {columnTitles[columnId]} ({tasks[columnId].length})
+                </Typography>
+                {/* <SortableContext items={tasks[columnId].map(task => task.id)} strategy={verticalListSortingStrategy}>
                 {tasks[columnId].map((task) => (
                   <SortableItem key={task.id} id={task.id} task={task} />
                 ))}
-              </SortableContext>
-              <Box mt={2}>
-                <Button
-                  startIcon={<AddIcon />}
-                  onClick={handleOpen}
-                  color="primary"
-                  sx={{
-                    textTransform: 'none',
-                    justifyContent: 'flex-start',
-                    padding: '8px',
-                    '&:hover': {
-                      backgroundColor: 'rgba(0, 0, 0, 0.04)',
-                    },
-                  }}
-                >
-                  Add task
-                </Button>
-                <TaskModal open={openTaskModal} handleClose={handleClose} />
-              </Box>
-            </Paper>
-          </Grid>
-        ))}
-      </Grid>
-      <DragOverlay>
-        {activeId ? <TaskCard task={getTaskById(activeId)} /> : null}
-      </DragOverlay>
-    </DndContext>
+              </SortableContext> */}
+                <TaskBoard tasks={tasks[columnId]} />
+                <Box mt={2}>
+                  <Button
+                    startIcon={<AddIcon />}
+                    onClick={handleOpen}
+                    color="primary"
+                    sx={{
+                      textTransform: 'none',
+                      justifyContent: 'flex-start',
+                      padding: '8px',
+                      '&:hover': {
+                        backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                      },
+                    }}
+                  >
+                    Add task
+                  </Button>
+                  <TaskModal open={openTaskModal} handleClose={handleClose} />
+                </Box>
+              </Paper>
+            </Grid>
+          ))}
+        </Grid>
+        <DragOverlay>
+          {activeId ? <TaskCard task={getTaskById(activeId)} /> : null}
+        </DragOverlay>
+      </DndContext>
+    </MenuProvider>
   )
 }
 
